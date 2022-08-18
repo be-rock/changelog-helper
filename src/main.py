@@ -8,6 +8,9 @@ from pathlib import Path
 
 from jinja2 import Environment, FileSystemLoader
 
+from src.log_util import get_logger
+
+logger = get_logger(logger_name=__name__)
 
 ALLOWED_CHANGELOG_ACTIONS = (
     "added",
@@ -53,6 +56,12 @@ def parse_args() -> argparse.Namespace:
         help="A space delimited list of items that have been *removed* during this release such as --removed 'first item' 'second item'.",
     )
     parser.add_argument(
+        "--changelog-file",
+        default='./CHANGELOG.md',
+        # nargs="?",
+        help="The absolute path to the CHANGELOG.md file. Defaults to `./CHANGELOG.md`",
+    )
+    parser.add_argument(
         "--github-snippet",
         action="store_true",
         # nargs="?",
@@ -83,7 +92,7 @@ def changelog_file_manager(content: str, file: str = 'CHANGELOG.md') -> None:
 
 def main() -> None:
     args = parse_args()
-    print(args)
+    logger.info(args)
     template = environment.get_template(name="changelog.j2")
     rendered = template.render(
         semantic_version=args.semver,
@@ -91,12 +100,11 @@ def main() -> None:
         date=datetime.now().date().isoformat(),
         args=args,
     )
-    print(f"Writing the following changelog actions to CHANGELOG.md...\n{rendered}")
-    changelog_file_manager(file='/tmp/CHANGELOG.md', content=rendered)
+    logger.info(f"Writing the following changelog actions to CHANGELOG.md...\n{rendered}")
+    changelog_file_manager(file=args.changelog_file, content=rendered)
     if args.github_snippet:
-        print(
-
-        f"""git tag {args.semver}, --message '{args.semver}' --message '{rendered.strip()}' && \\
+        logger.info(
+        f"""git tag {args.semver} --message '{args.semver}' --message '{rendered.strip()}' && \\
 git push --tags"""
         )
 
