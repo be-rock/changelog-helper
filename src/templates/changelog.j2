@@ -1,0 +1,12 @@
+
+## [{{ semantic_version }}] - {{ date }}
+{% for action in allowed_changelog_actions %}
+{% set items = args|attr(action) %}{# get the --items value associated with the used commandline 'actions' #}
+{% if items %}
+
+### {{ action|title }}
+{% for item in items %}
+{{ '- ' + item }}
+{% endfor %}
+{% endif %}
+{% endfor %}
