@@ -103,8 +103,8 @@ def main() -> None:
     logger.info(f"Writing the following changelog actions to CHANGELOG.md...\n{rendered}")
     changelog_file_manager(file=args.changelog_file, content=rendered)
     if args.github_snippet:
-        logger.info(
-        f"""git tag {args.semver} --message '{args.semver}' --message '{rendered.strip()}' && \\
+        logger.info('github tag creation helper...')
+        print(f"""git tag {args.semver} --message '{args.semver}' --message '{rendered.strip()}' && \\
 git push --tags"""
         )
 
