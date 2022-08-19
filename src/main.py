@@ -1,7 +1,3 @@
-#
-# TODO - if semver already exists, append, dont overwrite
-# TODO - add logger
-#
 import argparse
 from datetime import datetime
 from pathlib import Path
@@ -65,7 +61,7 @@ def parse_args() -> argparse.Namespace:
         "--github-snippet",
         action="store_true",
         # nargs="?",
-        help="todo",
+        help="Print git tag snippet to create a git tag and push it to origin.",
     )
     return parser.parse_args()
 
