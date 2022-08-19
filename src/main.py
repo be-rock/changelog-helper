@@ -88,7 +88,6 @@ def changelog_file_manager(content: str, file: str = 'CHANGELOG.md') -> None:
 
 def main() -> None:
     args = parse_args()
-    logger.info(args)
     template = environment.get_template(name="changelog.j2")
     rendered = template.render(
         semantic_version=args.semver,
